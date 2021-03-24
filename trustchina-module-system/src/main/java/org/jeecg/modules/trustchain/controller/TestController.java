@@ -1,4 +1,4 @@
-package org.jeecg.modules.trustchain;
+package org.jeecg.modules.trustchain.controller;
 
 import org.jeecg.common.api.vo.Result;
 import org.springframework.web.bind.annotation.GetMapping;
