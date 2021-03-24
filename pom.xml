@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.radebit</groupId>
-  <artifactId>trustchina-parent</artifactId>
+  <artifactId>trustchain-parent</artifactId>
   <version>2.4.3</version>
   <packaging>pom</packaging>
   
@@ -13,7 +13,7 @@
 	</parent>
 
 	<properties>
-		<trustchina.version>2.4.3</trustchina.version>
+		<trustchain.version>2.4.3</trustchain.version>
 		<java.version>1.8</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-cloud.version>Hoxton.SR8</spring-cloud.version>
@@ -48,8 +48,8 @@
 	</properties>
 
 	<modules>
-        <module>trustchina-base</module>
-        <module>trustchina-module-system</module>
+        <module>trustchain-base</module>
+        <module>trustchain-module-system</module>
 	</modules>
 
 	<distributionManagement>
@@ -124,61 +124,61 @@
 			<!-- system 模块-->
 			<dependency>
 				<groupId>com.radebit</groupId>
-				<artifactId>trustchina-module-system</artifactId>
-				<version>${trustchina.version}</version>
+				<artifactId>trustchain-module-system</artifactId>
+				<version>${trustchain.version}</version>
 			</dependency>
 
 			<!-- jeecg tools -->
 			<dependency>
 				<groupId>com.radebit</groupId>
-				<artifactId>trustchina-base-tools</artifactId>
-				<version>${trustchina.version}</version>
+				<artifactId>trustchain-base-tools</artifactId>
+				<version>${trustchain.version}</version>
 			</dependency>
 			<!-- jeecg core -->
 			<dependency>
 				<groupId>com.radebit</groupId>
-				<artifactId>trustchina-base-core</artifactId>
-				<version>${trustchina.version}</version>
+				<artifactId>trustchain-base-core</artifactId>
+				<version>${trustchain.version}</version>
 			</dependency>
 			<!-- system 单体 api -->
 			<dependency>
 				<groupId>com.radebit</groupId>
-				<artifactId>trustchina-system-local-api</artifactId>
-				<version>${trustchina.version}</version>
+				<artifactId>trustchain-system-local-api</artifactId>
+				<version>${trustchain.version}</version>
 			</dependency>
 			<!-- system 微服务 api -->
 			<dependency>
 				<groupId>com.radebit</groupId>
-				<artifactId>trustchina-system-cloud-api</artifactId>
-				<version>${trustchina.version}</version>
+				<artifactId>trustchain-system-cloud-api</artifactId>
+				<version>${trustchain.version}</version>
 			</dependency>
 
             <!--微服务模块-->
             <dependency>
                 <groupId>com.radebit</groupId>
-                <artifactId>trustchina-starter-cloud</artifactId>
-                <version>${trustchina.version}</version>
+                <artifactId>trustchain-starter-cloud</artifactId>
+                <version>${trustchain.version}</version>
             </dependency>
 
 			<!--xxl-job定时任务-->
 			<dependency>
 				<groupId>com.radebit</groupId>
-				<artifactId>trustchina-starter-job</artifactId>
-				<version>${trustchina.version}</version>
+				<artifactId>trustchain-starter-job</artifactId>
+				<version>${trustchain.version}</version>
 			</dependency>
 
 			<!--redis分布式锁-->
 			<dependency>
 				<groupId>com.radebit</groupId>
-				<artifactId>trustchina-starter-lock</artifactId>
-				<version>${trustchina.version}</version>
+				<artifactId>trustchain-starter-lock</artifactId>
+				<version>${trustchain.version}</version>
 			</dependency>
 
 			<!--rabbitmq消息队列-->
 			<dependency>
 				<groupId>com.radebit</groupId>
-				<artifactId>trustchina-starter-rabbitmq</artifactId>
-				<version>${trustchina.version}</version>
+				<artifactId>trustchain-starter-rabbitmq</artifactId>
+				<version>${trustchain.version}</version>
 			</dependency>
 
 
