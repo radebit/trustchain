@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: trustchina-system
+  profiles:
+    active: @profile.name@
