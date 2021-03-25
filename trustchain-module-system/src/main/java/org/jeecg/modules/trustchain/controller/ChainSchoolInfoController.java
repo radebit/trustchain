@@ -1,4 +1,4 @@
-package ${bussiPackage}.${entityPackage}.controller;
+package org.jeecg.modules.trustchain.controller;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.util.oConvertUtils;
-import ${bussiPackage}.${entityPackage}.entity.${entityName};
-import ${bussiPackage}.${entityPackage}.service.I${entityName}Service;
+import org.jeecg.modules.trustchain.entity.ChainSchoolInfo;
+import org.jeecg.modules.trustchain.service.IChainSchoolInfoService;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -35,77 +35,68 @@ import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.jeecg.common.aspect.annotation.AutoLog;
-<#assign bpm_flag=false>
-<#list originalColumns as po>
-<#if po.fieldDbName=='bpm_status'>
-  <#assign bpm_flag=true>
-</#if>
-</#list>
 
  /**
- * @Description: ${tableVo.ftlDescription}
+ * @Description: 学校信息
  * @Author: Rade
- * @Date:   ${.now?string["yyyy-MM-dd"]}
+ * @Date:   2021-03-25
  * @Version: V1.0
  */
-@Api(tags="${tableVo.ftlDescription}")
+@Api(tags="学校信息")
 @RestController
-@RequestMapping("/${entityPackage}/${entityName?uncap_first}")
+@RequestMapping("/trustchain/chainSchoolInfo")
 @Slf4j
-public class ${entityName}Controller extends JeecgController<${entityName}, I${entityName}Service> {
+public class ChainSchoolInfoController extends JeecgController<ChainSchoolInfo, IChainSchoolInfoService> {
 	@Autowired
-	private I${entityName}Service ${entityName?uncap_first}Service;
+	private IChainSchoolInfoService chainSchoolInfoService;
 	
 	/**
 	 * 分页列表查询
 	 *
-	 * @param ${entityName?uncap_first}
+	 * @param chainSchoolInfo
 	 * @param pageNo
 	 * @param pageSize
 	 * @param req
 	 * @return
 	 */
-	@AutoLog(value = "${tableVo.ftlDescription}-分页列表查询")
-	@ApiOperation(value="${tableVo.ftlDescription}-分页列表查询", notes="${tableVo.ftlDescription}-分页列表查询")
+	@AutoLog(value = "学校信息-分页列表查询")
+	@ApiOperation(value="学校信息-分页列表查询", notes="学校信息-分页列表查询")
 	@GetMapping(value = "/list")
-	public Result<?> queryPageList(${entityName} ${entityName?uncap_first},
+	public Result<?> queryPageList(ChainSchoolInfo chainSchoolInfo,
 								   @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 								   @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
 								   HttpServletRequest req) {
-		QueryWrapper<${entityName}> queryWrapper = QueryGenerator.initQueryWrapper(${entityName?uncap_first}, req.getParameterMap());
-		Page<${entityName}> page = new Page<${entityName}>(pageNo, pageSize);
-		IPage<${entityName}> pageList = ${entityName?uncap_first}Service.page(page, queryWrapper);
+		QueryWrapper<ChainSchoolInfo> queryWrapper = QueryGenerator.initQueryWrapper(chainSchoolInfo, req.getParameterMap());
+		Page<ChainSchoolInfo> page = new Page<ChainSchoolInfo>(pageNo, pageSize);
+		IPage<ChainSchoolInfo> pageList = chainSchoolInfoService.page(page, queryWrapper);
 		return Result.OK(pageList);
 	}
 	
 	/**
 	 *   添加
 	 *
-	 * @param ${entityName?uncap_first}
+	 * @param chainSchoolInfo
 	 * @return
 	 */
-	@AutoLog(value = "${tableVo.ftlDescription}-添加")
-	@ApiOperation(value="${tableVo.ftlDescription}-添加", notes="${tableVo.ftlDescription}-添加")
+	@AutoLog(value = "学校信息-添加")
+	@ApiOperation(value="学校信息-添加", notes="学校信息-添加")
 	@PostMapping(value = "/add")
-	public Result<?> add(@RequestBody ${entityName} ${entityName?uncap_first}) {
-	    <#if bpm_flag>
-        ${entityName?uncap_first}.setBpmStatus("1");
-	    </#if>
-		${entityName?uncap_first}Service.save(${entityName?uncap_first});
+	public Result<?> add(@RequestBody ChainSchoolInfo chainSchoolInfo) {
+		chainSchoolInfoService.save(chainSchoolInfo);
 		return Result.OK("添加成功！");
 	}
 	
 	/**
 	 *  编辑
 	 *
-	 * @param ${entityName?uncap_first}
+	 * @param chainSchoolInfo
 	 * @return
 	 */
-	@AutoLog(value = "${tableVo.ftlDescription}-编辑")
-	@ApiOperation(value="${tableVo.ftlDescription}-编辑", notes="${tableVo.ftlDescription}-编辑")
+	@AutoLog(value = "学校信息-编辑")
+	@ApiOperation(value="学校信息-编辑", notes="学校信息-编辑")
 	@PutMapping(value = "/edit")
-	public Result<?> edit(@RequestBody ${entityName} ${entityName?uncap_first}) {
-		${entityName?uncap_first}Service.updateById(${entityName?uncap_first});
+	public Result<?> edit(@RequestBody ChainSchoolInfo chainSchoolInfo) {
+		chainSchoolInfoService.updateById(chainSchoolInfo);
 		return Result.OK("编辑成功!");
 	}
 	
@@ -115,11 +106,11 @@ public class ${entityName}Controller extends JeecgController<${entityName}, I${e
 	 * @param id
 	 * @return
 	 */
-	@AutoLog(value = "${tableVo.ftlDescription}-通过id删除")
-	@ApiOperation(value="${tableVo.ftlDescription}-通过id删除", notes="${tableVo.ftlDescription}-通过id删除")
+	@AutoLog(value = "学校信息-通过id删除")
+	@ApiOperation(value="学校信息-通过id删除", notes="学校信息-通过id删除")
 	@DeleteMapping(value = "/delete")
 	public Result<?> delete(@RequestParam(name="id",required=true) String id) {
-		${entityName?uncap_first}Service.removeById(id);
+		chainSchoolInfoService.removeById(id);
 		return Result.OK("删除成功!");
 	}
 	
@@ -129,11 +120,11 @@ public class ${entityName}Controller extends JeecgController<${entityName}, I${e
 	 * @param ids
 	 * @return
 	 */
-	@AutoLog(value = "${tableVo.ftlDescription}-批量删除")
-	@ApiOperation(value="${tableVo.ftlDescription}-批量删除", notes="${tableVo.ftlDescription}-批量删除")
+	@AutoLog(value = "学校信息-批量删除")
+	@ApiOperation(value="学校信息-批量删除", notes="学校信息-批量删除")
 	@DeleteMapping(value = "/deleteBatch")
 	public Result<?> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
-		this.${entityName?uncap_first}Service.removeByIds(Arrays.asList(ids.split(",")));
+		this.chainSchoolInfoService.removeByIds(Arrays.asList(ids.split(",")));
 		return Result.OK("批量删除成功!");
 	}
 	
@@ -143,26 +134,26 @@ public class ${entityName}Controller extends JeecgController<${entityName}, I${e
 	 * @param id
 	 * @return
 	 */
-	@AutoLog(value = "${tableVo.ftlDescription}-通过id查询")
-	@ApiOperation(value="${tableVo.ftlDescription}-通过id查询", notes="${tableVo.ftlDescription}-通过id查询")
+	@AutoLog(value = "学校信息-通过id查询")
+	@ApiOperation(value="学校信息-通过id查询", notes="学校信息-通过id查询")
 	@GetMapping(value = "/queryById")
 	public Result<?> queryById(@RequestParam(name="id",required=true) String id) {
-		${entityName} ${entityName?uncap_first} = ${entityName?uncap_first}Service.getById(id);
-		if(${entityName?uncap_first}==null) {
+		ChainSchoolInfo chainSchoolInfo = chainSchoolInfoService.getById(id);
+		if(chainSchoolInfo==null) {
 			return Result.error("未找到对应数据");
 		}
-		return Result.OK(${entityName?uncap_first});
+		return Result.OK(chainSchoolInfo);
 	}
 
     /**
     * 导出excel
     *
     * @param request
-    * @param ${entityName?uncap_first}
+    * @param chainSchoolInfo
     */
     @RequestMapping(value = "/exportXls")
-    public ModelAndView exportXls(HttpServletRequest request, ${entityName} ${entityName?uncap_first}) {
-        return super.exportXls(request, ${entityName?uncap_first}, ${entityName}.class, "${tableVo.ftlDescription}");
+    public ModelAndView exportXls(HttpServletRequest request, ChainSchoolInfo chainSchoolInfo) {
+        return super.exportXls(request, chainSchoolInfo, ChainSchoolInfo.class, "学校信息");
     }
 
     /**
@@ -174,7 +165,7 @@ public class ${entityName}Controller extends JeecgController<${entityName}, I${e
     */
     @RequestMapping(value = "/importExcel", method = RequestMethod.POST)
     public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) {
-        return super.importExcel(request, response, ${entityName}.class);
+        return super.importExcel(request, response, ChainSchoolInfo.class);
     }
 
 }
