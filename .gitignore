@@ -3,3 +3,5 @@
 *.iml
 rebel.xml
 *.yml
+trustchain-module-system/src/main/resources/jeecg/jeecg_config.properties
+trustchain-module-system/src/main/resources/jeecg/jeecg_database.properties
