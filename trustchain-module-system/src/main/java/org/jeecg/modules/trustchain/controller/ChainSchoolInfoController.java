@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.util.oConvertUtils;
+import org.jeecg.common.system.base.controller.JeecgController;
 import org.jeecg.modules.trustchain.entity.ChainSchoolInfo;
 import org.jeecg.modules.trustchain.service.IChainSchoolInfoService;
 
