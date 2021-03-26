@@ -1,5 +1,6 @@
 package org.jeecg.modules.trustchain.service;
 
+import org.jeecg.modules.trustchain.dto.ChainEducationInfoDTO;
 import org.jeecg.modules.trustchain.entity.ChainEducationInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -21,8 +22,8 @@ public interface IChainEducationInfoService extends IService<ChainEducationInfo>
     /**
      * 审核学历
      *
-     * @param chainEducationInfo
+     * @param chainEducationInfoDTO
      * @return
      */
-    public boolean examineEducation(ChainEducationInfo chainEducationInfo);
+    public boolean examineEducation(ChainEducationInfoDTO chainEducationInfoDTO);
 }

@@ -9,13 +9,17 @@ import org.jeecg.common.system.api.ISysBaseAPI;
 import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.modules.system.entity.SysUser;
 import org.jeecg.modules.system.service.ISysUserService;
+import org.jeecg.modules.trustchain.dto.ChainEducationInfoDTO;
 import org.jeecg.modules.trustchain.entity.ChainEducationInfo;
+import org.jeecg.modules.trustchain.entity.ChainProcessRecord;
 import org.jeecg.modules.trustchain.mapper.ChainEducationInfoMapper;
 import org.jeecg.modules.trustchain.service.IChainEducationInfoService;
+import org.jeecg.modules.trustchain.service.IChainProcessRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @Description: 学历信息
@@ -31,6 +35,9 @@ public class ChainEducationInfoServiceImpl extends ServiceImpl<ChainEducationInf
 
     @Autowired
     private ISysBaseAPI sysBaseAPI;
+
+    @Autowired
+    private IChainProcessRecordService chainProcessRecordService;
 
     /**
      * 申请学历
@@ -53,29 +60,59 @@ public class ChainEducationInfoServiceImpl extends ServiceImpl<ChainEducationInf
         chainEducationInfo.setBirthDate(sysUser.getBirthday());
         chainEducationInfo.setNation(sysUser.getNation());
         chainEducationInfo.setIdNumber(sysUser.getIdNumber());
-        chainEducationInfo.setEducationState("1");  // 待审核
+        chainEducationInfo.setEducationState(ExamineStateConstants.TO_BE_REVIEWED);  // 待审核
         return save(chainEducationInfo);
     }
 
     /**
      * 审核学历
      *
-     * @param chainEducationInfo
+     * @param chainEducationInfoDTO
      * @return
      */
     @Override
-    public boolean examineEducation(ChainEducationInfo chainEducationInfo) {
+    @Transactional(rollbackFor = Exception.class)
+    public boolean examineEducation(ChainEducationInfoDTO chainEducationInfoDTO) {
         // 断言
-        Assert.notNull(chainEducationInfo.getId(), "学历证书ID不能为空！");
-        Assert.notNull(chainEducationInfo.getExamineState(), "审核状态不能为空！");
+        Assert.notNull(chainEducationInfoDTO.getId(), "学历证书ID不能为空！");
+        Assert.notNull(chainEducationInfoDTO.getExamineState(), "审核状态不能为空！");
+
+        ChainEducationInfo chainEducationInfoResult = getById(chainEducationInfoDTO.getId());
+        if (chainEducationInfoResult == null) {
+            throw new JeecgBootException("学历证书信息不存在！");
+        }
+        // 创建流程对象
+        ChainProcessRecord chainProcessRecord = new ChainProcessRecord();
         // 判断审核状态
-        if (chainEducationInfo.getExamineState().equals(ExamineStateConstants.APPROVED)) {
+        if (chainEducationInfoDTO.getExamineState().equals(ExamineStateConstants.APPROVED)) {
             // 审核通过，进入上链流程
-        } else if (chainEducationInfo.getExamineState().equals(ExamineStateConstants.FAIL_TO_AUDIT)) {
+            chainProcessRecord.setEducationId(chainEducationInfoDTO.getId());
+            chainProcessRecord.setProcessInfo(chainEducationInfoDTO.getProcessInfo());
+            chainProcessRecord.setOldState(chainEducationInfoResult.getEducationState());
+            chainProcessRecord.setNewState(chainEducationInfoDTO.getEducationState());
+            if (!chainProcessRecordService.save(chainProcessRecord)) {
+                throw new JeecgBootException("新增流程信息出错！");
+            }
+            // 更新学历信息
+            chainEducationInfoResult.setEducationState(chainEducationInfoDTO.getEducationState());
+            if (!updateById(chainEducationInfoResult)) {
+                throw new JeecgBootException("更新学历证书状态信息出错！");
+            }
+            // 进入上链流程
+
+        } else if (chainEducationInfoDTO.getExamineState().equals(ExamineStateConstants.FAIL_TO_AUDIT)) {
             // 审核不通过，打回
+            Assert.notBlank(chainEducationInfoDTO.getProcessInfo(), "审核说明不能为空！");
+            chainProcessRecord.setEducationId(chainEducationInfoDTO.getId());
+            chainProcessRecord.setProcessInfo(chainEducationInfoDTO.getProcessInfo());
+            chainProcessRecord.setOldState(chainEducationInfoResult.getEducationState());
+            chainProcessRecord.setNewState(chainEducationInfoDTO.getEducationState());
+            if (!chainProcessRecordService.save(chainProcessRecord)) {
+                throw new JeecgBootException("新增流程信息出错！");
+            }
         } else {
             throw new JeecgBootException("审核状态有误！");
         }
-        return false;
+        return true;
     }
 }

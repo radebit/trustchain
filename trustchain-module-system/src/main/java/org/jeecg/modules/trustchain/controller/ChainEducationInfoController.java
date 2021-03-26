@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.util.oConvertUtils;
+import org.jeecg.modules.trustchain.dto.ChainEducationInfoDTO;
 import org.jeecg.modules.trustchain.entity.ChainEducationInfo;
 import org.jeecg.modules.trustchain.service.IChainEducationInfoService;
 
@@ -186,14 +187,14 @@ public class ChainEducationInfoController extends JeecgController<ChainEducation
     /**
      * 管理员审核学历认证申请
      *
-     * @param chainEducationInfo
+     * @param chainEducationInfoDTO
      * @return
      */
     @AutoLog(value = "学历信息-审核")
     @ApiOperation(value = "学历信息-审核", notes = "学历信息-审核")
     @PutMapping(value = "/examineEducation")
-    public Result<?> examineEducation(@RequestBody ChainEducationInfo chainEducationInfo) {
-        chainEducationInfoService.examineEducation(chainEducationInfo);
+    public Result<?> examineEducation(@RequestBody ChainEducationInfoDTO chainEducationInfoDTO) {
+        chainEducationInfoService.examineEducation(chainEducationInfoDTO);
         return Result.OK("审核成功！");
     }
 

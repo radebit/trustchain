@@ -20,4 +20,19 @@ public interface ExamineStateConstants {
      * 审核不通过
      */
     String FAIL_TO_AUDIT = "3";
+
+    /**
+     * 待上链
+     */
+    String TO_BE_CHAIN = "4";
+
+    /**
+     * 上链中
+     */
+    String CHAINING = "5";
+
+    /**
+     * 已上链
+     */
+    String CHAINED = "6";
 }
