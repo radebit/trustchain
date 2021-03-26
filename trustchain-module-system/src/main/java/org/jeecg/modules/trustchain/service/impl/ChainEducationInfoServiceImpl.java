@@ -1,6 +1,8 @@
 package org.jeecg.modules.trustchain.service.impl;
 
+import cn.hutool.core.lang.Assert;
 import org.apache.shiro.SecurityUtils;
+import org.jeecg.common.constant.ExamineStateConstants;
 import org.jeecg.common.constant.enums.DeptEnum;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.system.api.ISysBaseAPI;
@@ -53,5 +55,27 @@ public class ChainEducationInfoServiceImpl extends ServiceImpl<ChainEducationInf
         chainEducationInfo.setIdNumber(sysUser.getIdNumber());
         chainEducationInfo.setEducationState("1");  // 待审核
         return save(chainEducationInfo);
+    }
+
+    /**
+     * 审核学历
+     *
+     * @param chainEducationInfo
+     * @return
+     */
+    @Override
+    public boolean examineEducation(ChainEducationInfo chainEducationInfo) {
+        // 断言
+        Assert.notNull(chainEducationInfo.getId(), "学历证书ID不能为空！");
+        Assert.notNull(chainEducationInfo.getExamineState(), "审核状态不能为空！");
+        // 判断审核状态
+        if (chainEducationInfo.getExamineState().equals(ExamineStateConstants.APPROVED)) {
+            // 审核通过，进入上链流程
+        } else if (chainEducationInfo.getExamineState().equals(ExamineStateConstants.FAIL_TO_AUDIT)) {
+            // 审核不通过，打回
+        } else {
+            throw new JeecgBootException("审核状态有误！");
+        }
+        return false;
     }
 }

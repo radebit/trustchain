@@ -183,4 +183,18 @@ public class ChainEducationInfoController extends JeecgController<ChainEducation
         return Result.OK("申请成功！请耐心等待系统审核！");
     }
 
+    /**
+     * 管理员审核学历认证申请
+     *
+     * @param chainEducationInfo
+     * @return
+     */
+    @AutoLog(value = "学历信息-审核")
+    @ApiOperation(value = "学历信息-审核", notes = "学历信息-审核")
+    @PutMapping(value = "/examineEducation")
+    public Result<?> examineEducation(@RequestBody ChainEducationInfo chainEducationInfo) {
+        chainEducationInfoService.examineEducation(chainEducationInfo);
+        return Result.OK("审核成功！");
+    }
+
 }
