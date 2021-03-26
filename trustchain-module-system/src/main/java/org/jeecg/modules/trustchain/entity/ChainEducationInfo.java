@@ -119,52 +119,52 @@ public class ChainEducationInfo implements Serializable {
      */
     @Excel(name = "所属学校", width = 15, dictTable = "chain_school_info", dicText = "school_name", dicCode = "id")
     @Dict(dictTable = "chain_school_info", dicText = "school_name", dicCode = "id")
-    @ApiModelProperty(value = "所属学校")
+    @ApiModelProperty(value = "所属学校", required = true)
     private java.lang.String schoolId;
     /**
      * 层次
      */
     @Excel(name = "层次", width = 15, dicCode = "chain_education_level")
     @Dict(dicCode = "chain_education_level")
-    @ApiModelProperty(value = "层次")
+    @ApiModelProperty(value = "层次", required = true)
     private java.lang.String educationLevel;
     /**
      * 专业
      */
     @Excel(name = "专业", width = 15)
-    @ApiModelProperty(value = "专业")
+    @ApiModelProperty(value = "专业", required = true)
     private java.lang.String major;
     /**
      * 学制
      */
     @Excel(name = "学制", width = 15)
-    @ApiModelProperty(value = "学制")
+    @ApiModelProperty(value = "学制", required = true)
     private java.lang.String educationYear;
     /**
      * 学历类别
      */
     @Excel(name = "学历类别", width = 15, dicCode = "education_type")
     @Dict(dicCode = "education_type")
-    @ApiModelProperty(value = "学历类别")
+    @ApiModelProperty(value = "学历类别", required = true)
     private java.lang.String educationType;
     /**
      * 学习形式
      */
     @Excel(name = "学习形式", width = 15, dicCode = "chain_learn_type")
     @Dict(dicCode = "chain_learn_type")
-    @ApiModelProperty(value = "学习形式")
+    @ApiModelProperty(value = "学习形式", required = true)
     private java.lang.String learnType;
     /**
      * 学号
      */
     @Excel(name = "学号", width = 15)
-    @ApiModelProperty(value = "学号")
+    @ApiModelProperty(value = "学号", required = true)
     private java.lang.String schoolNumber;
     /**
      * 班级
      */
     @Excel(name = "班级", width = 15)
-    @ApiModelProperty(value = "班级")
+    @ApiModelProperty(value = "班级", required = true)
     private java.lang.String classNumber;
     /**
      * 入学时间
@@ -172,7 +172,7 @@ public class ChainEducationInfo implements Serializable {
     @Excel(name = "入学时间", width = 15, format = "yyyy-MM-dd")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @ApiModelProperty(value = "入学时间")
+    @ApiModelProperty(value = "入学时间", required = true)
     private java.util.Date admissionDate;
     /**
      * 毕业时间
@@ -180,14 +180,14 @@ public class ChainEducationInfo implements Serializable {
     @Excel(name = "毕业时间", width = 15, format = "yyyy-MM-dd")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @ApiModelProperty(value = "毕业时间")
+    @ApiModelProperty(value = "毕业时间", required = true)
     private java.util.Date graduationDate;
     /**
      * 学籍状态
      */
     @Excel(name = "学籍状态", width = 15, dicCode = "education_state")
     @Dict(dicCode = "education_state")
-    @ApiModelProperty(value = "学籍状态")
+    @ApiModelProperty(value = "学籍状态", required = true)
     private java.lang.String educationState;
     /**
      * 审核状态
