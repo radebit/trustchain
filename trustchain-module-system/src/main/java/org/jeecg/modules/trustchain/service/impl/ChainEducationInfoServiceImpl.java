@@ -49,6 +49,7 @@ public class ChainEducationInfoServiceImpl extends ServiceImpl<ChainEducationInf
      * @param chainEducationInfo
      * @return
      */
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean applyEducation(ChainEducationInfo chainEducationInfo) {
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
@@ -64,8 +65,20 @@ public class ChainEducationInfoServiceImpl extends ServiceImpl<ChainEducationInf
         chainEducationInfo.setBirthDate(sysUser.getBirthday());
         chainEducationInfo.setNation(sysUser.getNation());
         chainEducationInfo.setIdNumber(sysUser.getIdNumber());
-        chainEducationInfo.setEducationState(ExamineStateConstants.TO_BE_REVIEWED);  // 待审核
-        return save(chainEducationInfo);
+        chainEducationInfo.setExamineState(ExamineStateConstants.TO_BE_REVIEWED);  // 待审核
+        if (!save(chainEducationInfo)) {
+            throw new JeecgBootException("创建申请失败！");
+        }
+        // 创建过程
+        ChainProcessRecord chainProcessRecord = new ChainProcessRecord();
+        chainProcessRecord.setEducationId(chainEducationInfo.getId());
+        chainProcessRecord.setProcessInfo("学历证书已提交申请");
+        chainProcessRecord.setOldState(ExamineStateConstants.TO_BE_REVIEWED);
+        chainProcessRecord.setNewState(ExamineStateConstants.TO_BE_CHAIN);
+        if (!chainProcessRecordService.save(chainProcessRecord)) {
+            throw new JeecgBootException("创建过程失败！");
+        }
+        return true;
     }
 
     /**
@@ -80,6 +93,7 @@ public class ChainEducationInfoServiceImpl extends ServiceImpl<ChainEducationInf
         // 断言
         Assert.notNull(chainEducationInfoDTO.getId(), "学历证书ID不能为空！");
         Assert.notNull(chainEducationInfoDTO.getExamineState(), "审核状态不能为空！");
+        Assert.notBlank(chainEducationInfoDTO.getProcessInfo(), "审核说明不能为空！");
 
         ChainEducationInfo chainEducationInfoResult = getById(chainEducationInfoDTO.getId());
         if (chainEducationInfoResult == null) {
@@ -108,7 +122,6 @@ public class ChainEducationInfoServiceImpl extends ServiceImpl<ChainEducationInf
             }
         } else if (chainEducationInfoDTO.getExamineState().equals(ExamineStateConstants.FAIL_TO_AUDIT)) {
             // 审核不通过，打回
-            Assert.notBlank(chainEducationInfoDTO.getProcessInfo(), "审核说明不能为空！");
             chainProcessRecord.setEducationId(chainEducationInfoDTO.getId());
             chainProcessRecord.setProcessInfo(chainEducationInfoDTO.getProcessInfo());
             chainProcessRecord.setOldState(chainEducationInfoResult.getEducationState());
