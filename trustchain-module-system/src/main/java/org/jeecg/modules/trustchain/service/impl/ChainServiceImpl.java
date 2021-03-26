@@ -10,4 +10,15 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ChainServiceImpl implements IChainService {
+    /**
+     * 学历证书信息上链
+     *
+     * @param chainEducationInfoId
+     * @return
+     */
+    @Override
+    public boolean onChain(String chainEducationInfoId) {
+
+        return false;
+    }
 }

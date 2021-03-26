@@ -15,6 +15,7 @@ import org.jeecg.modules.trustchain.entity.ChainProcessRecord;
 import org.jeecg.modules.trustchain.mapper.ChainEducationInfoMapper;
 import org.jeecg.modules.trustchain.service.IChainEducationInfoService;
 import org.jeecg.modules.trustchain.service.IChainProcessRecordService;
+import org.jeecg.modules.trustchain.service.IChainService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +39,9 @@ public class ChainEducationInfoServiceImpl extends ServiceImpl<ChainEducationInf
 
     @Autowired
     private IChainProcessRecordService chainProcessRecordService;
+
+    @Autowired
+    private IChainService chainService;
 
     /**
      * 申请学历
@@ -99,7 +103,9 @@ public class ChainEducationInfoServiceImpl extends ServiceImpl<ChainEducationInf
                 throw new JeecgBootException("更新学历证书状态信息出错！");
             }
             // 进入上链流程
-
+            if (!chainService.onChain(chainEducationInfoDTO.getId())) {
+                throw new JeecgBootException("学历证书上链出错！");
+            }
         } else if (chainEducationInfoDTO.getExamineState().equals(ExamineStateConstants.FAIL_TO_AUDIT)) {
             // 审核不通过，打回
             Assert.notBlank(chainEducationInfoDTO.getProcessInfo(), "审核说明不能为空！");
@@ -109,6 +115,11 @@ public class ChainEducationInfoServiceImpl extends ServiceImpl<ChainEducationInf
             chainProcessRecord.setNewState(chainEducationInfoDTO.getEducationState());
             if (!chainProcessRecordService.save(chainProcessRecord)) {
                 throw new JeecgBootException("新增流程信息出错！");
+            }
+            // 更新学历信息
+            chainEducationInfoResult.setEducationState(chainEducationInfoDTO.getEducationState());
+            if (!updateById(chainEducationInfoResult)) {
+                throw new JeecgBootException("更新学历证书状态信息出错！");
             }
         } else {
             throw new JeecgBootException("审核状态有误！");
