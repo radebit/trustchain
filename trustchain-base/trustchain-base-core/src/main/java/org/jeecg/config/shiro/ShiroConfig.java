@@ -52,7 +52,7 @@ public class ShiroConfig {
 
     /**
      * Filter Chain定义说明
-     *
+     * <p>
      * 1、一个URL可以配置多个Filter，使用逗号分隔
      * 2、当设置多个过滤器时，全部验证通过，才视为通过
      * 3、部分过滤器可指定参数，如perms，roles
@@ -63,14 +63,16 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         // 拦截器
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
-        if(oConvertUtils.isNotEmpty(excludeUrls)){
+        if (oConvertUtils.isNotEmpty(excludeUrls)) {
             String[] permissionUrl = excludeUrls.split(",");
-            for(String url : permissionUrl){
-                filterChainDefinitionMap.put(url,"anon");
+            for (String url : permissionUrl) {
+                filterChainDefinitionMap.put(url, "anon");
             }
         }
         // 配置测试不拦截的路径
-        filterChainDefinitionMap.put("/test/**", "anon"); //cas验证登录
+        filterChainDefinitionMap.put("/test/**", "anon");
+        filterChainDefinitionMap.put("/geetest/register/**", "anon"); // 极验验证
+        filterChainDefinitionMap.put("/sys/geetestLogin/**", "anon"); // 极验验证登录
         // 配置不会被拦截的链接 顺序判断
         filterChainDefinitionMap.put("/sys/cas/client/validateLogin", "anon"); //cas验证登录
         filterChainDefinitionMap.put("/sys/randomImage/**", "anon"); //登录验证码接口排除
@@ -129,7 +131,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/websocket/**", "anon");//系统通知和公告
         filterChainDefinitionMap.put("/newsWebsocket/**", "anon");//CMS模块
         filterChainDefinitionMap.put("/vxeSocket/**", "anon");//JVxeTable无痕刷新示例
-        filterChainDefinitionMap.put("/eoaSocket/**","anon");//我的聊天
+        filterChainDefinitionMap.put("/eoaSocket/**", "anon");//我的聊天
 
         //性能监控  TODO 存在安全漏洞泄露TOEKN（durid连接池也有）
         filterChainDefinitionMap.put("/actuator/**", "anon");
@@ -138,7 +140,7 @@ public class ShiroConfig {
         Map<String, Filter> filterMap = new HashMap<String, Filter>(1);
         //如果cloudServer为空 则说明是单体 需要加载跨域配置
         Object cloudServer = env.getProperty(CommonConstant.CLOUD_SERVER_KEY);
-        filterMap.put("jwt", new JwtFilter(cloudServer==null));
+        filterMap.put("jwt", new JwtFilter(cloudServer == null));
         shiroFilterFactoryBean.setFilters(filterMap);
         // <!-- 过滤链定义，从上向下顺序执行，一般将/**放在最为下边
         filterChainDefinitionMap.put("/**", "jwt");
@@ -172,6 +174,7 @@ public class ShiroConfig {
 
     /**
      * 下面的代码是添加注解支持
+     *
      * @return
      */
     @Bean
@@ -238,11 +241,11 @@ public class ShiroConfig {
                 redisManager.setPassword(lettuceConnectionFactory.getPassword());
             }
             manager = redisManager;
-        }else{
+        } else {
             // redis集群支持，优先使用集群配置
             RedisClusterManager redisManager = new RedisClusterManager();
             Set<HostAndPort> portSet = new HashSet<>();
-            lettuceConnectionFactory.getClusterConfiguration().getClusterNodes().forEach(node -> portSet.add(new HostAndPort(node.getHost() , node.getPort())));
+            lettuceConnectionFactory.getClusterConfiguration().getClusterNodes().forEach(node -> portSet.add(new HostAndPort(node.getHost(), node.getPort())));
             JedisCluster jedisCluster = new JedisCluster(portSet);
             redisManager.setJedisCluster(jedisCluster);
             manager = redisManager;
