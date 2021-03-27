@@ -52,7 +52,7 @@ public class ChainServiceImpl implements IChainService {
         // 创建交易
         String blockHash = sendTransaction(chainEducationInfoResult.getId());
         // 更新学历证书信息
-        chainEducationInfoResult.setEducationState(ExamineStateConstants.CHAINING);
+        chainEducationInfoResult.setExamineState(ExamineStateConstants.CHAINING);
         chainEducationInfoResult.setChainHash(blockHash);
         if (!chainEducationInfoService.updateById(chainEducationInfoResult)) {
             throw new JeecgBootException("更新学历证书信息失败！");

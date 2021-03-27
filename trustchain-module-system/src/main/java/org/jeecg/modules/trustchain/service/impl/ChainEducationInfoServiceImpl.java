@@ -112,7 +112,7 @@ public class ChainEducationInfoServiceImpl extends ServiceImpl<ChainEducationInf
                 throw new JeecgBootException("新增流程信息出错！");
             }
             // 更新学历信息
-            chainEducationInfoResult.setEducationState(chainEducationInfoDTO.getEducationState());
+            chainEducationInfoResult.setExamineState(chainEducationInfoDTO.getEducationState());
             if (!updateById(chainEducationInfoResult)) {
                 throw new JeecgBootException("更新学历证书状态信息出错！");
             }
@@ -130,7 +130,7 @@ public class ChainEducationInfoServiceImpl extends ServiceImpl<ChainEducationInf
                 throw new JeecgBootException("新增流程信息出错！");
             }
             // 更新学历信息
-            chainEducationInfoResult.setEducationState(chainEducationInfoDTO.getEducationState());
+            chainEducationInfoResult.setExamineState(chainEducationInfoDTO.getEducationState());
             if (!updateById(chainEducationInfoResult)) {
                 throw new JeecgBootException("更新学历证书状态信息出错！");
             }

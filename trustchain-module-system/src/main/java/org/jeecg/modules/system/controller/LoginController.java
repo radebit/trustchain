@@ -374,20 +374,21 @@ public class LoginController {
         String clientType = jsonObject.getString("clientType");
         String secCode = jsonObject.getString("secCode");
         String challenge = jsonObject.getString("challenge");
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("client_type", clientType);
+        paramMap.put("seccode", secCode);
+        paramMap.put("challenge", challenge);
+        paramMap.put("json_format", "1");
+        paramMap.put("sdk", "java-servlet%3A3.1.0");
+        paramMap.put("captchaid", geetestConfig.getCaptchaId());
         String resultData = HttpRequest
                 .post(geetestConfig.getGeetestUrl() + "/validate.php")
                 .header("Content-Type", "application/x-www-form-urlencoded")
-                .body("{\n" +
-                        "\t\"client_type\":\"" + clientType + "\",\n" +
-                        "\t\"seccode\":\"" + secCode + "\",\n" +
-                        "\t\"challenge\":\"" + challenge + "\",\n" +
-                        "\t\"json_format\":\"1\",\n" +
-                        "\t\"sdk\":\"java-servlet%3A3.1.0\",\n" +
-                        "\t\"captchaid\":\"" + geetestConfig.getCaptchaId() + "\",\n" +
-                        "}")
+                .form(paramMap)
                 .execute()
                 .body();
-        if (resultData.equals("false")) {
+        String resultSecCode = JSONObject.parseObject(resultData).getString("seccode");
+        if (!resultSecCode.equals("true")) {
             result.error500("验证失败，请重试!");
             return result;
         }
