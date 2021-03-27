@@ -99,6 +99,10 @@ public class ChainEducationInfoServiceImpl extends ServiceImpl<ChainEducationInf
         if (chainEducationInfoResult == null) {
             throw new JeecgBootException("学历证书信息不存在！");
         }
+        // 判断审核阶段
+        if (!chainEducationInfoResult.getExamineState().equals(ExamineStateConstants.TO_BE_REVIEWED) || !chainEducationInfoResult.getExamineState().equals(ExamineStateConstants.APPROVED)) {
+            throw new JeecgBootException("当前状态不允许审核操作！");
+        }
         // 创建流程对象
         ChainProcessRecord chainProcessRecord = new ChainProcessRecord();
         // 判断审核状态

@@ -60,7 +60,7 @@ public class ChainServiceImpl implements IChainService {
         // 创建过程记录
         ChainProcessRecord chainProcessRecordAfter = new ChainProcessRecord();
         chainProcessRecordAfter.setEducationId(chainEducationInfoId);
-        chainProcessRecordAfter.setProcessInfo("学历证书正在上链中");
+        chainProcessRecordAfter.setProcessInfo("学历证书正在上链中,交易Hash:" + blockHash);
         chainProcessRecordAfter.setOldState(ExamineStateConstants.TO_BE_CHAIN);
         chainProcessRecordAfter.setNewState(ExamineStateConstants.CHAINING);
         chainProcessRecordService.save(chainProcessRecordAfter);

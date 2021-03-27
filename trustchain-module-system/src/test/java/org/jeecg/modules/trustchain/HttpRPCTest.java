@@ -90,7 +90,7 @@ public class HttpRPCTest {
 
     @Test
     public void testFindService(){
-        System.out.println(chainService.findTransactionByBlockHash("0x7ab021bb33dd0d6cbc2835761f8c0ff3646839ccb5172cbcde2325dc6b907b02").toString());
+        System.out.println(chainService.findTransactionByBlockHash("0x244ca73131866ba9dd35690338456ff4db0bbe582abbede9e3e44095b277cb23").toString());
     }
 
     @Test

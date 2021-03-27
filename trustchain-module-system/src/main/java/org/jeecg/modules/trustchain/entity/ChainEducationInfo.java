@@ -63,11 +63,17 @@ public class ChainEducationInfo implements Serializable {
     @ApiModelProperty(value = "更新日期")
     private java.util.Date updateTime;
     /**
-     * 哈希值
+     * 交易哈希
      */
-    @Excel(name = "哈希值", width = 15)
-    @ApiModelProperty(value = "哈希值")
+    @Excel(name = "交易哈希", width = 15)
+    @ApiModelProperty(value = "交易哈希")
     private java.lang.String chainHash;
+    /**
+     * 区块地址
+     */
+    @Excel(name = "区块地址", width = 15)
+    @ApiModelProperty(value = "区块地址")
+    private java.lang.String blockHash;
     /**
      * 用户
      */
