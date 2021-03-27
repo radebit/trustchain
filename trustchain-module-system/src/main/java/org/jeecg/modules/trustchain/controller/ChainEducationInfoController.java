@@ -10,6 +10,7 @@ import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.util.oConvertUtils;
@@ -61,8 +62,9 @@ public class ChainEducationInfoController extends JeecgController<ChainEducation
      * @param req
      * @return
      */
-    @AutoLog(value = "学历信息-分页列表查询")
-    @ApiOperation(value = "学历信息-分页列表查询", notes = "学历信息-分页列表查询")
+    @AutoLog(value = "管理员学历信息-分页列表查询")
+    @ApiOperation(value = "管理员学历信息-分页列表查询", notes = "管理员学历信息-分页列表查询")
+    @RequiresPermissions("chainEducationInfo:admin:list")
     @GetMapping(value = "/list")
     public Result<?> queryPageList(ChainEducationInfo chainEducationInfo,
                                    @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
@@ -74,33 +76,33 @@ public class ChainEducationInfoController extends JeecgController<ChainEducation
         return Result.OK(pageList);
     }
 
-    /**
-     * 添加
-     *
-     * @param chainEducationInfo
-     * @return
-     */
-    @AutoLog(value = "学历信息-添加")
-    @ApiOperation(value = "学历信息-添加", notes = "学历信息-添加")
-    @PostMapping(value = "/add")
-    public Result<?> add(@RequestBody ChainEducationInfo chainEducationInfo) {
-        chainEducationInfoService.save(chainEducationInfo);
-        return Result.OK("添加成功！");
-    }
-
-    /**
-     * 编辑
-     *
-     * @param chainEducationInfo
-     * @return
-     */
-    @AutoLog(value = "学历信息-编辑")
-    @ApiOperation(value = "学历信息-编辑", notes = "学历信息-编辑")
-    @PutMapping(value = "/edit")
-    public Result<?> edit(@RequestBody ChainEducationInfo chainEducationInfo) {
-        chainEducationInfoService.updateById(chainEducationInfo);
-        return Result.OK("编辑成功!");
-    }
+//    /**
+//     * 添加
+//     *
+//     * @param chainEducationInfo
+//     * @return
+//     */
+//    @AutoLog(value = "学历信息-添加")
+//    @ApiOperation(value = "学历信息-添加", notes = "学历信息-添加")
+//    @PostMapping(value = "/add")
+//    public Result<?> add(@RequestBody ChainEducationInfo chainEducationInfo) {
+//        chainEducationInfoService.save(chainEducationInfo);
+//        return Result.OK("添加成功！");
+//    }
+//
+//    /**
+//     * 编辑
+//     *
+//     * @param chainEducationInfo
+//     * @return
+//     */
+//    @AutoLog(value = "学历信息-编辑")
+//    @ApiOperation(value = "学历信息-编辑", notes = "学历信息-编辑")
+//    @PutMapping(value = "/edit")
+//    public Result<?> edit(@RequestBody ChainEducationInfo chainEducationInfo) {
+//        chainEducationInfoService.updateById(chainEducationInfo);
+//        return Result.OK("编辑成功!");
+//    }
 
     /**
      * 通过id删除
@@ -147,28 +149,28 @@ public class ChainEducationInfoController extends JeecgController<ChainEducation
         return Result.OK(chainEducationInfo);
     }
 
-    /**
-     * 导出excel
-     *
-     * @param request
-     * @param chainEducationInfo
-     */
-    @RequestMapping(value = "/exportXls")
-    public ModelAndView exportXls(HttpServletRequest request, ChainEducationInfo chainEducationInfo) {
-        return super.exportXls(request, chainEducationInfo, ChainEducationInfo.class, "学历信息");
-    }
-
-    /**
-     * 通过excel导入数据
-     *
-     * @param request
-     * @param response
-     * @return
-     */
-    @RequestMapping(value = "/importExcel", method = RequestMethod.POST)
-    public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) {
-        return super.importExcel(request, response, ChainEducationInfo.class);
-    }
+//    /**
+//     * 导出excel
+//     *
+//     * @param request
+//     * @param chainEducationInfo
+//     */
+//    @RequestMapping(value = "/exportXls")
+//    public ModelAndView exportXls(HttpServletRequest request, ChainEducationInfo chainEducationInfo) {
+//        return super.exportXls(request, chainEducationInfo, ChainEducationInfo.class, "学历信息");
+//    }
+//
+//    /**
+//     * 通过excel导入数据
+//     *
+//     * @param request
+//     * @param response
+//     * @return
+//     */
+//    @RequestMapping(value = "/importExcel", method = RequestMethod.POST)
+//    public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) {
+//        return super.importExcel(request, response, ChainEducationInfo.class);
+//    }
 
     /**
      * 学生申请学历认证
@@ -178,6 +180,7 @@ public class ChainEducationInfoController extends JeecgController<ChainEducation
      */
     @AutoLog(value = "学历信息-申请")
     @ApiOperation(value = "学历信息-申请", notes = "学历信息-申请")
+    @RequiresPermissions("chainEducationInfo:student:apply")
     @PostMapping(value = "/applyEducation")
     public Result<?> applyEducation(@RequestBody ChainEducationInfo chainEducationInfo) {
         chainEducationInfoService.applyEducation(chainEducationInfo);
@@ -192,6 +195,7 @@ public class ChainEducationInfoController extends JeecgController<ChainEducation
      */
     @AutoLog(value = "学历信息-审核")
     @ApiOperation(value = "学历信息-审核", notes = "学历信息-审核")
+    @RequiresPermissions("chainEducationInfo:student:examine")
     @PutMapping(value = "/examineEducation")
     public Result<?> examineEducation(@RequestBody ChainEducationInfoDTO chainEducationInfoDTO) {
         chainEducationInfoService.examineEducation(chainEducationInfoDTO);
