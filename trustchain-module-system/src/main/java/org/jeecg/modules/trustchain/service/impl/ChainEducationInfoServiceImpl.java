@@ -74,7 +74,7 @@ public class ChainEducationInfoServiceImpl extends ServiceImpl<ChainEducationInf
         chainProcessRecord.setEducationId(chainEducationInfo.getId());
         chainProcessRecord.setProcessInfo("学历证书已提交申请");
         chainProcessRecord.setOldState(ExamineStateConstants.TO_BE_REVIEWED);
-        chainProcessRecord.setNewState(ExamineStateConstants.TO_BE_CHAIN);
+        chainProcessRecord.setNewState(ExamineStateConstants.TO_BE_REVIEWED);
         if (!chainProcessRecordService.save(chainProcessRecord)) {
             throw new JeecgBootException("创建过程失败！");
         }

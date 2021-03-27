@@ -379,7 +379,7 @@ public class LoginController {
         paramMap.put("seccode", secCode);
         paramMap.put("challenge", challenge);
         paramMap.put("json_format", "1");
-        paramMap.put("sdk", "java-servlet%3A3.1.0");
+        paramMap.put("sdk", "jave-servlet:3.1.1");
         paramMap.put("captchaid", geetestConfig.getCaptchaId());
         String resultData = HttpRequest
                 .post(geetestConfig.getGeetestUrl() + "/validate.php")
@@ -388,7 +388,7 @@ public class LoginController {
                 .execute()
                 .body();
         String resultSecCode = JSONObject.parseObject(resultData).getString("seccode");
-        if (!resultSecCode.equals("true")) {
+        if (resultSecCode.equals("false")) {
             result.error500("验证失败，请重试!");
             return result;
         }
