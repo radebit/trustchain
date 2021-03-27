@@ -106,13 +106,13 @@ public class ChainEducationInfoServiceImpl extends ServiceImpl<ChainEducationInf
             // 审核通过，进入上链流程
             chainProcessRecord.setEducationId(chainEducationInfoDTO.getId());
             chainProcessRecord.setProcessInfo(chainEducationInfoDTO.getProcessInfo());
-            chainProcessRecord.setOldState(chainEducationInfoResult.getEducationState());
-            chainProcessRecord.setNewState(chainEducationInfoDTO.getEducationState());
+            chainProcessRecord.setOldState(chainEducationInfoResult.getExamineState());
+            chainProcessRecord.setNewState(chainEducationInfoDTO.getExamineState());
             if (!chainProcessRecordService.save(chainProcessRecord)) {
                 throw new JeecgBootException("新增流程信息出错！");
             }
             // 更新学历信息
-            chainEducationInfoResult.setExamineState(chainEducationInfoDTO.getEducationState());
+            chainEducationInfoResult.setExamineState(chainEducationInfoDTO.getExamineState());
             if (!updateById(chainEducationInfoResult)) {
                 throw new JeecgBootException("更新学历证书状态信息出错！");
             }
@@ -124,13 +124,13 @@ public class ChainEducationInfoServiceImpl extends ServiceImpl<ChainEducationInf
             // 审核不通过，打回
             chainProcessRecord.setEducationId(chainEducationInfoDTO.getId());
             chainProcessRecord.setProcessInfo(chainEducationInfoDTO.getProcessInfo());
-            chainProcessRecord.setOldState(chainEducationInfoResult.getEducationState());
-            chainProcessRecord.setNewState(chainEducationInfoDTO.getEducationState());
+            chainProcessRecord.setOldState(chainEducationInfoResult.getExamineState());
+            chainProcessRecord.setNewState(chainEducationInfoDTO.getExamineState());
             if (!chainProcessRecordService.save(chainProcessRecord)) {
                 throw new JeecgBootException("新增流程信息出错！");
             }
             // 更新学历信息
-            chainEducationInfoResult.setExamineState(chainEducationInfoDTO.getEducationState());
+            chainEducationInfoResult.setExamineState(chainEducationInfoDTO.getExamineState());
             if (!updateById(chainEducationInfoResult)) {
                 throw new JeecgBootException("更新学历证书状态信息出错！");
             }
