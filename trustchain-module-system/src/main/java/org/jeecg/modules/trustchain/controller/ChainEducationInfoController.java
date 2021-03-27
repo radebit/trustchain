@@ -10,9 +10,14 @@ import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.constant.enums.DeptEnum;
+import org.jeecg.common.exception.JeecgBootException;
+import org.jeecg.common.system.api.ISysBaseAPI;
 import org.jeecg.common.system.query.QueryGenerator;
+import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules.trustchain.dto.ChainEducationInfoDTO;
 import org.jeecg.modules.trustchain.entity.ChainEducationInfo;
@@ -53,6 +58,9 @@ public class ChainEducationInfoController extends JeecgController<ChainEducation
     @Autowired
     private IChainEducationInfoService chainEducationInfoService;
 
+    @Autowired
+    private ISysBaseAPI sysBaseAPI;
+
     /**
      * 分页列表查询
      *
@@ -62,14 +70,18 @@ public class ChainEducationInfoController extends JeecgController<ChainEducation
      * @param req
      * @return
      */
-    @AutoLog(value = "管理员学历信息-分页列表查询")
-    @ApiOperation(value = "管理员学历信息-分页列表查询", notes = "管理员学历信息-分页列表查询")
-    @RequiresPermissions("chainEducationInfo:admin:list")
+    @AutoLog(value = "学历信息-分页列表查询")
+    @ApiOperation(value = "学历信息-分页列表查询", notes = "学历信息-分页列表查询")
     @GetMapping(value = "/list")
     public Result<?> queryPageList(ChainEducationInfo chainEducationInfo,
                                    @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
                                    @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                                    HttpServletRequest req) {
+        // 判断权限
+        LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        if (sysBaseAPI.getDepartIdsByUsername(loginUser.getUsername()).contains(DeptEnum.STUDENT.getDeptId())) {
+            chainEducationInfo.setUserId(loginUser.getId());
+        }
         QueryWrapper<ChainEducationInfo> queryWrapper = QueryGenerator.initQueryWrapper(chainEducationInfo, req.getParameterMap());
         Page<ChainEducationInfo> page = new Page<ChainEducationInfo>(pageNo, pageSize);
         IPage<ChainEducationInfo> pageList = chainEducationInfoService.page(page, queryWrapper);
