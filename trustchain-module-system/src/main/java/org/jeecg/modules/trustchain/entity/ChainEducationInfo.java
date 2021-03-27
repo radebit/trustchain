@@ -205,8 +205,8 @@ public class ChainEducationInfo implements Serializable {
     /**
      * 核验时间
      */
-    @Excel(name = "核验时间", width = 15, format = "yyyy-MM-dd")
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+    @Excel(name = "核验时间", width = 15, format = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty(value = "核验时间")
     private java.util.Date checkTime;
