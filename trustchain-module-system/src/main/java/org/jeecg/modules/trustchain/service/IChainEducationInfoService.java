@@ -26,4 +26,12 @@ public interface IChainEducationInfoService extends IService<ChainEducationInfo>
      * @return
      */
     public boolean examineEducation(ChainEducationInfoDTO chainEducationInfoDTO);
+
+    /**
+     * 核验学历
+     *
+     * @param chainEducationInfo
+     * @return
+     */
+    public ChainEducationInfo checkEducation(ChainEducationInfo chainEducationInfo);
 }

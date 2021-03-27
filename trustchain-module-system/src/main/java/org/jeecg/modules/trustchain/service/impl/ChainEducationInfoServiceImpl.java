@@ -1,6 +1,7 @@
 package org.jeecg.modules.trustchain.service.impl;
 
 import cn.hutool.core.lang.Assert;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.constant.ExamineStateConstants;
 import org.jeecg.common.constant.enums.DeptEnum;
@@ -21,6 +22,9 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * @Description: 学历信息
@@ -142,5 +146,32 @@ public class ChainEducationInfoServiceImpl extends ServiceImpl<ChainEducationInf
             throw new JeecgBootException("审核状态有误！");
         }
         return true;
+    }
+
+    /**
+     * 核验学历
+     *
+     * @param chainEducationInfo
+     * @return
+     */
+    @Override
+    public ChainEducationInfo checkEducation(ChainEducationInfo chainEducationInfo) {
+        Assert.notNull(chainEducationInfo.getBlockHash(), "区块Hash信息不能为空！");
+        Assert.notBlank(chainEducationInfo.getIdNumber(), "证件号码不能为空！");
+        Assert.notBlank(chainEducationInfo.getRealName(), "真实姓名不能为空！");
+        QueryWrapper<ChainEducationInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(ChainEducationInfo::getBlockHash, chainEducationInfo.getBlockHash());
+        List<ChainEducationInfo> list = list(queryWrapper);
+        if (list.size() <= 0) {
+            throw new JeecgBootException("未查询到该学历证书信息！请仔细甄别学历证书信息真伪！");
+        }
+        ChainEducationInfo chainEducationInfoResult = list.get(0);
+        if (!chainEducationInfoResult.getIdNumber().equals(chainEducationInfo.getIdNumber()) || !chainEducationInfoResult.getRealName().equals(chainEducationInfo.getRealName())) {
+            throw new JeecgBootException("核验信息不正确，请认真核对！");
+        }
+        // 更新check时间
+        chainEducationInfoResult.setCheckTime(new Date());
+        updateById(chainEducationInfoResult);
+        return chainEducationInfoResult;
     }
 }

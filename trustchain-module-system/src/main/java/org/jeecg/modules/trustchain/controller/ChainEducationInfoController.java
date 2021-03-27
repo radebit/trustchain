@@ -214,4 +214,18 @@ public class ChainEducationInfoController extends JeecgController<ChainEducation
         return Result.OK("审核成功！");
     }
 
+    /**
+     * 学历证书核验
+     *
+     * @param chainEducationInfo
+     * @return
+     */
+    @AutoLog(value = "学历信息-核验")
+    @ApiOperation(value = "学历信息-核验", notes = "学历信息-核验")
+    @GetMapping(value = "/checkEducation")
+    public Result<?> checkEducation(ChainEducationInfo chainEducationInfo) {
+        ChainEducationInfo chainEducationInfoResult = chainEducationInfoService.checkEducation(chainEducationInfo);
+        return Result.OK("学历证书信息真实上链可信", chainEducationInfoResult);
+    }
+
 }

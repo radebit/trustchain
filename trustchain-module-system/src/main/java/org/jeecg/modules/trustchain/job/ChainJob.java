@@ -16,6 +16,7 @@ import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -53,6 +54,8 @@ public class ChainJob implements Job {
                     ChainEducationInfo chainEducationInfoResult = chainEducationInfoService.getById(item.getId());
                     chainEducationInfoResult.setExamineState(ExamineStateConstants.CHAINED);
                     chainEducationInfoResult.setBlockHash(blockHash);
+                    // 更新check时间
+                    chainEducationInfoResult.setCheckTime(new Date());
                     if (!chainEducationInfoService.updateById(chainEducationInfoResult)) {
                         throw new JeecgBootException("学历ID：" + item.getId() + "更新异常！");
                     }
