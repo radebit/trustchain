@@ -34,4 +34,12 @@ public interface IChainEducationInfoService extends IService<ChainEducationInfo>
      * @return
      */
     public ChainEducationInfo checkEducation(ChainEducationInfo chainEducationInfo);
+
+    /**
+     * 学生修改学历信息
+     *
+     * @param chainEducationInfo
+     * @return
+     */
+    public ChainEducationInfo studentEdit(ChainEducationInfo chainEducationInfo);
 }

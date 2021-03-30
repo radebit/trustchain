@@ -117,6 +117,20 @@ public class ChainEducationInfoController extends JeecgController<ChainEducation
 //    }
 
     /**
+     * 学生修改学历信息
+     *
+     * @param chainEducationInfo
+     * @return
+     */
+    @AutoLog(value = "学生修改学历信息")
+    @ApiOperation(value = "学生修改学历信息", notes = "学生修改学历信息")
+    @PutMapping(value = "/studentEdit")
+    public Result<?> studentEdit(@RequestBody ChainEducationInfo chainEducationInfo) {
+        chainEducationInfoService.studentEdit(chainEducationInfo);
+        return Result.OK("修改提交成功!");
+    }
+
+    /**
      * 通过id删除
      *
      * @param id
