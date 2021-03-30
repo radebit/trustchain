@@ -104,48 +104,49 @@ public class ChainEducationInfoServiceImpl extends ServiceImpl<ChainEducationInf
             throw new JeecgBootException("学历证书信息不存在！");
         }
         // 判断审核阶段
-        if (!chainEducationInfoResult.getExamineState().equals(ExamineStateConstants.TO_BE_REVIEWED) || !chainEducationInfoResult.getExamineState().equals(ExamineStateConstants.APPROVED)) {
+        if (chainEducationInfoResult.getExamineState().equals(ExamineStateConstants.TO_BE_REVIEWED) || chainEducationInfoResult.getExamineState().equals(ExamineStateConstants.APPROVED) || chainEducationInfoResult.getExamineState().equals(ExamineStateConstants.FAIL_TO_AUDIT)) {
+            // 创建流程对象
+            ChainProcessRecord chainProcessRecord = new ChainProcessRecord();
+            // 判断审核状态
+            if (chainEducationInfoDTO.getExamineState().equals(ExamineStateConstants.APPROVED)) {
+                // 审核通过，进入上链流程
+                chainProcessRecord.setEducationId(chainEducationInfoDTO.getId());
+                chainProcessRecord.setProcessInfo(chainEducationInfoDTO.getProcessInfo());
+                chainProcessRecord.setOldState(chainEducationInfoResult.getExamineState());
+                chainProcessRecord.setNewState(chainEducationInfoDTO.getExamineState());
+                if (!chainProcessRecordService.save(chainProcessRecord)) {
+                    throw new JeecgBootException("新增流程信息出错！");
+                }
+                // 更新学历信息
+                chainEducationInfoResult.setExamineState(chainEducationInfoDTO.getExamineState());
+                if (!updateById(chainEducationInfoResult)) {
+                    throw new JeecgBootException("更新学历证书状态信息出错！");
+                }
+                // 进入上链流程
+                if (!chainService.onChain(chainEducationInfoDTO.getId())) {
+                    throw new JeecgBootException("学历证书上链出错！");
+                }
+            } else if (chainEducationInfoDTO.getExamineState().equals(ExamineStateConstants.FAIL_TO_AUDIT)) {
+                // 审核不通过，打回
+                chainProcessRecord.setEducationId(chainEducationInfoDTO.getId());
+                chainProcessRecord.setProcessInfo(chainEducationInfoDTO.getProcessInfo());
+                chainProcessRecord.setOldState(chainEducationInfoResult.getExamineState());
+                chainProcessRecord.setNewState(chainEducationInfoDTO.getExamineState());
+                if (!chainProcessRecordService.save(chainProcessRecord)) {
+                    throw new JeecgBootException("新增流程信息出错！");
+                }
+                // 更新学历信息
+                chainEducationInfoResult.setExamineState(chainEducationInfoDTO.getExamineState());
+                if (!updateById(chainEducationInfoResult)) {
+                    throw new JeecgBootException("更新学历证书状态信息出错！");
+                }
+            } else {
+                throw new JeecgBootException("审核状态有误！");
+            }
+            return true;
+        } else {
             throw new JeecgBootException("当前状态不允许审核操作！");
         }
-        // 创建流程对象
-        ChainProcessRecord chainProcessRecord = new ChainProcessRecord();
-        // 判断审核状态
-        if (chainEducationInfoDTO.getExamineState().equals(ExamineStateConstants.APPROVED)) {
-            // 审核通过，进入上链流程
-            chainProcessRecord.setEducationId(chainEducationInfoDTO.getId());
-            chainProcessRecord.setProcessInfo(chainEducationInfoDTO.getProcessInfo());
-            chainProcessRecord.setOldState(chainEducationInfoResult.getExamineState());
-            chainProcessRecord.setNewState(chainEducationInfoDTO.getExamineState());
-            if (!chainProcessRecordService.save(chainProcessRecord)) {
-                throw new JeecgBootException("新增流程信息出错！");
-            }
-            // 更新学历信息
-            chainEducationInfoResult.setExamineState(chainEducationInfoDTO.getExamineState());
-            if (!updateById(chainEducationInfoResult)) {
-                throw new JeecgBootException("更新学历证书状态信息出错！");
-            }
-            // 进入上链流程
-            if (!chainService.onChain(chainEducationInfoDTO.getId())) {
-                throw new JeecgBootException("学历证书上链出错！");
-            }
-        } else if (chainEducationInfoDTO.getExamineState().equals(ExamineStateConstants.FAIL_TO_AUDIT)) {
-            // 审核不通过，打回
-            chainProcessRecord.setEducationId(chainEducationInfoDTO.getId());
-            chainProcessRecord.setProcessInfo(chainEducationInfoDTO.getProcessInfo());
-            chainProcessRecord.setOldState(chainEducationInfoResult.getExamineState());
-            chainProcessRecord.setNewState(chainEducationInfoDTO.getExamineState());
-            if (!chainProcessRecordService.save(chainProcessRecord)) {
-                throw new JeecgBootException("新增流程信息出错！");
-            }
-            // 更新学历信息
-            chainEducationInfoResult.setExamineState(chainEducationInfoDTO.getExamineState());
-            if (!updateById(chainEducationInfoResult)) {
-                throw new JeecgBootException("更新学历证书状态信息出错！");
-            }
-        } else {
-            throw new JeecgBootException("审核状态有误！");
-        }
-        return true;
     }
 
     /**
